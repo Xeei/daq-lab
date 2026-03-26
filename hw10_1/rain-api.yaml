@@ -1,0 +1,169 @@
+openapi: 3.0.3
+info:
+  title: Rain API
+  version: 1.0.0
+
+paths:
+  /basins:
+    get:
+      summary: List all basins
+      operationId: getBasins
+      responses:
+        '200':
+          description: A list of basins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BasinShort'
+
+  /basins/{basinId}:
+    get:
+      summary: Get basin details
+      operationId: getBasinDetails
+      parameters:
+        - name: basinId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Basin details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasinFull'
+        '404':
+          description: Basin not found
+
+  /basins/{basinId}/stations:
+    get:
+      summary: List stations in a basin
+      operationId: getStationsByBasin
+      parameters:
+        - name: basinId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of stations in the basin
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StationShort'
+
+  /stations/{stationId}:
+    get:
+      summary: Get station details
+      operationId: getStationDetails
+      parameters:
+        - name: stationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Station details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationFull'
+        '404':
+          description: Station not found
+
+  /basins/{basinId}/annualRainfalls/{year}:
+    get:
+      summary: Get annual rainfall for a basin
+      operationId: getAnnualRainfall
+      parameters:
+        - name: basinId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Annual rainfall data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationYearAmount'
+        '404':
+          description: Basin not found
+
+components:
+  schemas:
+    BasinShort:
+      type: object
+      properties:
+        basinId:
+          type: integer
+        name:
+          type: string
+      required: [basinId, name]
+
+    BasinFull:
+      type: object
+      properties:
+        basin_id:
+          type: integer
+        name:
+          type: string
+        area:
+          type: number
+          format: float
+      required: [basin_id, name, area]
+
+    StationShort:
+      type: object
+      properties:
+        station_id:
+          type: integer
+        basin_id:
+          type: integer
+        name:
+          type: string
+      required: [station_id, basin_id, name]
+
+    StationFull:
+      type: object
+      properties:
+        station_id:
+          type: integer
+        basin_id:
+          type: integer
+        ename:
+          type: string
+        tname:
+          type: string
+        lat:
+          type: number
+          format: float
+        lon:
+          type: number
+          format: float
+      required: [station_id, basin_id, ename, tname, lat, lon]
+
+    StationYearAmount:
+      type: object
+      properties:
+        basin_id:
+          type: integer
+        year:
+          type: integer
+        rainfall:
+          type: number
+          format: float
+      required: [basin_id, year, rainfall]
