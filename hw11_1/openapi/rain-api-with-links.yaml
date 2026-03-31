@@ -40,15 +40,19 @@ paths:
                 $ref: '#/components/schemas/Basin'
           links:
             stations:
-              operationId: controller.get_stations_in_basin
+              operationRef: '#/paths/~1stationsInBasin~1{basinId}/get'
               parameters:
                 basinId: $response.body#/basinId
             annualRainfall:
-              operationId: controller.get_basin_annual_rainfall
+              operationRef: '#/paths/~1basins~1{basinId}~1annualRainfalls~1{year}/get'
               parameters:
                 basinId: $response.body#/basinId
             avgMonthlyRainfalls:
-              operationId: controller.get_basin_monthly_average
+              operationRef: '#/paths/~1basins~1{basinId}~1monthlyAverage/get'
+              parameters:
+                basinId: $response.body#/basinId
+            allAnnualRainfalls:
+              operationRef: '#/paths/~1basins~1{basinId}~1allAnnualRainfalls/get'
               parameters:
                 basinId: $response.body#/basinId
   /stationsInBasin/{basinId}:
@@ -89,7 +93,7 @@ paths:
                 $ref: '#/components/schemas/Station'
           links:
             basin:
-              operationId: controller.get_basin_details
+              operationRef: '#/paths/~1basins~1{basinId}/get'
               parameters:
                 basinId: $response.body#/basinId
   /basins/{basinId}/annualRainfalls/{year}:
@@ -133,6 +137,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MonthlyAverage'
+
+  /basins/{basinId}/allAnnualRainfalls:
+    parameters:
+    - name: basinId
+      in: path
+      required: true
+      schema:
+        type : integer
+    get:
+      summary: Returns annual total Raina for Basin
+      operationId: controller.get_basin_aanual_rainfall
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnualRainfall'
+
 
 components:
   schemas:

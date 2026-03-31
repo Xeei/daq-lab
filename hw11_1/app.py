@@ -23,13 +23,12 @@ except ModuleNotFoundError:
           " pip install -r requirements.txt")
     sys.exit(1)
 
-from swagger_server.encoder import JSONProvider
+from swagger_server.encoder import JSONEncoder
 
 def main():
     app = connexion.App(__name__, specification_dir='./openapi/')
-    app.app.json_provider_class = JSONProvider
-    app.app.json = JSONProvider(app.app)
-    app.add_api('rain-api.yaml',
+    app.app.json_encoder = JSONEncoder
+    app.add_api('rain-api-with-links.yaml',
                 arguments={'title': 'Chaopraya Rainfalls API'},
                 pythonic_params=True)
 
