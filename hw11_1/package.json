@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "openapi-to-graphql-cli": "^3.0.7"
+  },
+  "overrides": {
+    "graphql": "16.13.2"
+  }
+}
